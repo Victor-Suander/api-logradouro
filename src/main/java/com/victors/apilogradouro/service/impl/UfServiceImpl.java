@@ -11,15 +11,12 @@ import com.victors.apilogradouro.service.UfService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 // TODO: criar testes unitários para este service
 
-/**
- * @Service — registra esta classe como bean Spring gerenciado.
- * @RequiredArgsConstructor — Lombok gera construtor com todos os campos final,
- * permitindo injeção de dependência via construtor sem @Autowired.
- */
+// @RequiredArgsConstructor gera construtor com campos final — injeção via construtor sem @Autowired
 @Service
 @RequiredArgsConstructor
 public class UfServiceImpl implements UfService {
@@ -28,8 +25,7 @@ public class UfServiceImpl implements UfService {
 
     @Override
     public UfResponseDTO salvar(UfRequestDTO dto) {
-        // Antes de persistir, verifica se já existe outra UF com a mesma sigla.
-        // existsBySigla faz uma consulta COUNT otimizada, sem carregar a entidade inteira.
+        // existsBySigla faz COUNT otimizado, sem carregar a entidade inteira
         if (ufRepository.existsBySigla(dto.sigla())) {
             throw new RegraNegocioException(MensagensErro.UF_SIGLA_DUPLICADA);
         }
@@ -43,10 +39,8 @@ public class UfServiceImpl implements UfService {
     }
 
     @Override
-    public List<UfResponseDTO> listar() {
-        return ufRepository.findAll().stream()
-                .map(this::toResponseDTO)
-                .toList();
+    public Page<UfResponseDTO> listar(Pageable pageable) {
+        return ufRepository.findAll(pageable).map(this::toResponseDTO);
     }
 
     @Override
@@ -66,9 +60,7 @@ public class UfServiceImpl implements UfService {
     public UfResponseDTO atualizar(Long id, UfRequestDTO dto) {
         Uf uf = buscarOuLancarErro(id);
 
-        // Na atualização, usamos existsBySiglaAndIdNot para verificar duplicidade
-        // excluindo o próprio registro da consulta. Sem isso, editar uma UF sem
-        // mudar a sigla lançaria erro de duplicidade incorretamente.
+        // exclui o próprio id da consulta — sem isso, editar sem mudar a sigla lançaria falso erro de duplicidade
         if (ufRepository.existsBySiglaAndIdNot(dto.sigla(), id)) {
             throw new RegraNegocioException(MensagensErro.UF_SIGLA_DUPLICADA);
         }
@@ -85,13 +77,11 @@ public class UfServiceImpl implements UfService {
         ufRepository.deleteById(id);
     }
 
-    /** Busca a UF pelo id ou lança RecursoNaoEncontradoException. Reutilizado em buscarPorId, atualizar e deletar. */
     private Uf buscarOuLancarErro(Long id) {
         return ufRepository.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoException(MensagensErro.UF_NAO_ENCONTRADA));
     }
 
-    /** Converte a entidade Uf para UfResponseDTO. Centraliza o mapeamento em um único lugar. */
     private UfResponseDTO toResponseDTO(Uf uf) {
         return new UfResponseDTO(uf.getId(), uf.getSigla(), uf.getNome());
     }

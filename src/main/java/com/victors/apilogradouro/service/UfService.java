@@ -2,14 +2,14 @@ package com.victors.apilogradouro.service;
 
 import com.victors.apilogradouro.dto.request.UfRequestDTO;
 import com.victors.apilogradouro.dto.response.UfResponseDTO;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface UfService {
 
     UfResponseDTO salvar(UfRequestDTO dto);
 
-    List<UfResponseDTO> listar();
+    Page<UfResponseDTO> listar(Pageable pageable);
 
     UfResponseDTO buscarPorId(Long id);
 

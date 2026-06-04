@@ -7,6 +7,7 @@ import com.victors.apilogradouro.entity.Uf;
 import com.victors.apilogradouro.exception.MensagensErro;
 import com.victors.apilogradouro.exception.RecursoNaoEncontradoException;
 import com.victors.apilogradouro.exception.RegraNegocioException;
+import com.victors.apilogradouro.repository.BairroRepository;
 import com.victors.apilogradouro.repository.CidadeRepository;
 import com.victors.apilogradouro.repository.UfRepository;
 import com.victors.apilogradouro.service.CidadeService;
@@ -23,6 +24,7 @@ public class CidadeServiceImpl implements CidadeService {
 
     private final CidadeRepository cidadeRepository;
     private final UfRepository ufRepository;
+    private final BairroRepository bairroRepository;
 
     @Override
     public CidadeResponseDTO salvar(CidadeRequestDTO dto) {
@@ -68,6 +70,10 @@ public class CidadeServiceImpl implements CidadeService {
     @Override
     public void deletar(Long id) {
         buscarOuLancarErro(id);
+        // impede exclusão de cidade com bairros vinculados — evitaria violação de FK no banco
+        if (bairroRepository.existsByCidadeId(id)) {
+            throw new RegraNegocioException(MensagensErro.CIDADE_COM_BAIRROS);
+        }
         cidadeRepository.deleteById(id);
     }
 

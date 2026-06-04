@@ -6,6 +6,7 @@ import com.victors.apilogradouro.entity.Uf;
 import com.victors.apilogradouro.exception.MensagensErro;
 import com.victors.apilogradouro.exception.RecursoNaoEncontradoException;
 import com.victors.apilogradouro.exception.RegraNegocioException;
+import com.victors.apilogradouro.repository.CidadeRepository;
 import com.victors.apilogradouro.repository.UfRepository;
 import com.victors.apilogradouro.service.UfService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 public class UfServiceImpl implements UfService {
 
     private final UfRepository ufRepository;
+    private final CidadeRepository cidadeRepository;
 
     @Override
     public UfResponseDTO salvar(UfRequestDTO dto) {
@@ -74,6 +76,10 @@ public class UfServiceImpl implements UfService {
     @Override
     public void deletar(Long id) {
         buscarOuLancarErro(id);
+        // impede exclusão de UF com cidades vinculadas — evitaria violação de FK no banco
+        if (cidadeRepository.existsByUfId(id)) {
+            throw new RegraNegocioException(MensagensErro.UF_COM_CIDADES);
+        }
         ufRepository.deleteById(id);
     }
 

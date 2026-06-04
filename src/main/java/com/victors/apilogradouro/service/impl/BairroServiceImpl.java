@@ -9,6 +9,7 @@ import com.victors.apilogradouro.exception.RecursoNaoEncontradoException;
 import com.victors.apilogradouro.exception.RegraNegocioException;
 import com.victors.apilogradouro.repository.BairroRepository;
 import com.victors.apilogradouro.repository.CidadeRepository;
+import com.victors.apilogradouro.repository.LogradouroRepository;
 import com.victors.apilogradouro.service.BairroService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,7 @@ public class BairroServiceImpl implements BairroService {
 
     private final BairroRepository bairroRepository;
     private final CidadeRepository cidadeRepository;
+    private final LogradouroRepository logradouroRepository;
 
     @Override
     public BairroResponseDTO salvar(BairroRequestDTO dto) {
@@ -68,6 +70,10 @@ public class BairroServiceImpl implements BairroService {
     @Override
     public void deletar(Long id) {
         buscarOuLancarErro(id);
+        // impede exclusão de bairro com logradouros vinculados — evitaria violação de FK no banco
+        if (logradouroRepository.existsByBairroId(id)) {
+            throw new RegraNegocioException(MensagensErro.BAIRRO_COM_LOGRADOUROS);
+        }
         bairroRepository.deleteById(id);
     }
 

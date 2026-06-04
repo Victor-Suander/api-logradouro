@@ -13,6 +13,8 @@ public interface CidadeRepository extends JpaRepository<Cidade, Long> {
 
     boolean existsByNomeAndIdNot(String nome, Long id);
 
+    boolean existsByUfId(Long ufId);
+
     // usado no endpoint hierárquico para listar cidades de uma UF específica
     Page<Cidade> findByUfId(Long ufId, Pageable pageable);
 }

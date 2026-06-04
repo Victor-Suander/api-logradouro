@@ -13,6 +13,8 @@ public interface BairroRepository extends JpaRepository<Bairro, Long> {
 
     boolean existsByNomeAndIdNot(String nome, Long id);
 
+    boolean existsByCidadeId(Long cidadeId);
+
     // usado no endpoint hierárquico para listar bairros de uma cidade específica
     Page<Bairro> findByCidadeId(Long cidadeId, Pageable pageable);
 }

@@ -17,4 +17,8 @@ public final class MensagensErro {
 
     public static final String LOGRADOURO_NAO_ENCONTRADO = "Logradouro não encontrado.";
     public static final String LOGRADOURO_CEP_DUPLICADO  = "Já existe um logradouro cadastrado com este CEP.";
+
+    public static final String UF_COM_CIDADES        = "Não é possível excluir uma UF que possui cidades cadastradas.";
+    public static final String CIDADE_COM_BAIRROS    = "Não é possível excluir uma cidade que possui bairros cadastrados.";
+    public static final String BAIRRO_COM_LOGRADOUROS = "Não é possível excluir um bairro que possui logradouros cadastrados.";
 }

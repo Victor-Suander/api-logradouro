@@ -15,6 +15,8 @@ public interface LogradouroRepository extends JpaRepository<Logradouro, Long> {
 
     boolean existsByCepAndIdNot(String cep, Long id);
 
+    boolean existsByBairroId(Long bairroId);
+
     Page<Logradouro> findByBairroId(Long bairroId, Pageable pageable);
 
     Optional<Logradouro> findByCep(String cep);

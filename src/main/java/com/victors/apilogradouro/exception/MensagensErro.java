@@ -14,4 +14,7 @@ public final class MensagensErro {
 
     public static final String BAIRRO_NAO_ENCONTRADO  = "Bairro não encontrado.";
     public static final String BAIRRO_NOME_DUPLICADO  = "Já existe um bairro cadastrado com este nome.";
+
+    public static final String LOGRADOURO_NAO_ENCONTRADO = "Logradouro não encontrado.";
+    public static final String LOGRADOURO_CEP_DUPLICADO  = "Já existe um logradouro cadastrado com este CEP.";
 }

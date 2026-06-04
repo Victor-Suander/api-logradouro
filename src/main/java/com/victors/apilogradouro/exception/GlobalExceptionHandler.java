@@ -7,15 +7,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Map;
 
-/**
- * Centraliza o tratamento de exceções lançadas pelos controllers.
- * @RestControllerAdvice intercepta automaticamente qualquer exceção não tratada
- * em todos os @RestController da aplicação e retorna respostas HTTP padronizadas.
- */
+// intercepta exceções não tratadas em qualquer @RestController da aplicação
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    /** Trata violações de regra de negócio (ex: sigla duplicada). Retorna HTTP 400 Bad Request. */
+    // regra de negócio violada → 400
     @ExceptionHandler(RegraNegocioException.class)
     public ResponseEntity<Map<String, String>> handleRegraNegocio(RegraNegocioException ex) {
         return ResponseEntity
@@ -23,7 +19,7 @@ public class GlobalExceptionHandler {
                 .body(Map.of("mensagem", ex.getMessage()));
     }
 
-    /** Trata recursos não encontrados no banco (ex: UF com id inexistente). Retorna HTTP 404 Not Found. */
+    // recurso não encontrado no banco → 404
     @ExceptionHandler(RecursoNaoEncontradoException.class)
     public ResponseEntity<Map<String, String>> handleRecursoNaoEncontrado(RecursoNaoEncontradoException ex) {
         return ResponseEntity

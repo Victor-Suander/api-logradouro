@@ -7,28 +7,17 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 // TODO: criar repository da Cidade seguindo o mesmo padrão
+// Spring Data implementa os métodos abaixo automaticamente a partir do nome, sem SQL
 
-/**
- * Repositório JPA para a entidade Uf.
- * JpaRepository já fornece CRUD completo (save, findById, findAll, delete, etc.).
- * Os métodos abaixo são query methods — o Spring Data os implementa automaticamente
- * a partir do nome do método, sem necessidade de escrever SQL.
- */
 @Repository
 public interface UfRepository extends JpaRepository<Uf, Long> {
 
-    /** Verifica se já existe uma UF com a sigla informada. Usado na validação ao criar uma nova UF. */
+    // usado na validação de criação
     boolean existsBySigla(String sigla);
 
-    /**
-     * Verifica se existe outra UF com a mesma sigla, excluindo o próprio registro pelo id.
-     * Usado na validação ao atualizar uma UF: evita bloquear a edição do registro em si.
-     */
+    // exclui o próprio registro da consulta — evita falso positivo ao editar sem mudar a sigla
     boolean existsBySiglaAndIdNot(String sigla, Long id);
 
-    /**
-     * Busca uma UF pela sigla.
-     * Retorna Optional para forçar o tratamento explícito do caso em que a UF não é encontrada.
-     */
+    // Optional força tratamento explícito do caso não encontrado
     Optional<Uf> findBySigla(String sigla);
 }

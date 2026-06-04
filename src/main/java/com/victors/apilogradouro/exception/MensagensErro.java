@@ -11,4 +11,7 @@ public final class MensagensErro {
 
     public static final String CIDADE_NAO_ENCONTRADA  = "Cidade não encontrada.";
     public static final String CIDADE_NOME_DUPLICADO  = "Já existe uma cidade cadastrada com este nome.";
+
+    public static final String BAIRRO_NAO_ENCONTRADO  = "Bairro não encontrado.";
+    public static final String BAIRRO_NOME_DUPLICADO  = "Já existe um bairro cadastrado com este nome.";
 }

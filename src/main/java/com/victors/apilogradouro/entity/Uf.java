@@ -13,16 +13,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 // TODO: criar entidade Cidade com relacionamento com UF
-// TODO: adicionar campos de auditoria createdAt e updatedAt
 
 @Entity
 @Table(name = "uf")
 @Getter
 @Setter
-@NoArgsConstructor // obrigatório pelo JPA
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Uf {
+public class Uf extends Auditavel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment delegado ao banco

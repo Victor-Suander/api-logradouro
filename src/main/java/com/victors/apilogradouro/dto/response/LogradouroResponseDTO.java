@@ -2,7 +2,7 @@ package com.victors.apilogradouro.dto.response;
 
 import com.victors.apilogradouro.entity.TipoLogradouro;
 
-// TODO: adicionar campos createdAt e updatedAt quando auditoria for implementada
+import java.time.LocalDateTime;
 
 public record LogradouroResponseDTO(
         Long id,
@@ -12,5 +12,7 @@ public record LogradouroResponseDTO(
         Long bairroId,
         String bairroNome,
         String cidadeNome,
-        String ufSigla
+        String ufSigla,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {}

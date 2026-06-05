@@ -99,7 +99,9 @@ public class CidadeServiceImpl implements CidadeService {
                 cidade.getId(),
                 cidade.getNome(),
                 cidade.getUf().getId(),
-                cidade.getUf().getSigla()
+                cidade.getUf().getSigla(),
+                cidade.getCreatedAt(),
+                cidade.getUpdatedAt()
         );
     }
 }

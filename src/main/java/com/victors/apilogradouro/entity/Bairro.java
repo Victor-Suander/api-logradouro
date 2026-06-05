@@ -23,7 +23,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Bairro {
+public class Bairro extends Auditavel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

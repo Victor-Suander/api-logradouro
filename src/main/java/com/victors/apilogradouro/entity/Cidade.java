@@ -23,7 +23,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Cidade {
+public class Cidade extends Auditavel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

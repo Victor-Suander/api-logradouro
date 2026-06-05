@@ -1,9 +1,11 @@
 package com.victors.apilogradouro.dto.response;
 
-// TODO: adicionar campos createdAt e updatedAt quando auditoria for implementada
+import java.time.LocalDateTime;
 
 public record UfResponseDTO(
         Long id,
         String sigla,
-        String nome
+        String nome,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {}

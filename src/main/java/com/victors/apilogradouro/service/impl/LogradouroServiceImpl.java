@@ -101,7 +101,9 @@ public class LogradouroServiceImpl implements LogradouroService {
                 bairro.getId(),
                 bairro.getNome(),
                 bairro.getCidade().getNome(),
-                bairro.getCidade().getUf().getSigla()
+                bairro.getCidade().getUf().getSigla(),
+                logradouro.getCreatedAt(),
+                logradouro.getUpdatedAt()
         );
     }
 }

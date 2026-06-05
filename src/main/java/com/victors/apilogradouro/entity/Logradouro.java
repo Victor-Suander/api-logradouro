@@ -23,7 +23,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Logradouro {
+public class Logradouro extends Auditavel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

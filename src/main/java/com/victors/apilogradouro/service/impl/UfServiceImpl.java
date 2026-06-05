@@ -89,6 +89,6 @@ public class UfServiceImpl implements UfService {
     }
 
     private UfResponseDTO toResponseDTO(Uf uf) {
-        return new UfResponseDTO(uf.getId(), uf.getSigla(), uf.getNome());
+        return new UfResponseDTO(uf.getId(), uf.getSigla(), uf.getNome(), uf.getCreatedAt(), uf.getUpdatedAt());
     }
 }

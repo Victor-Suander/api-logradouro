@@ -99,7 +99,9 @@ public class BairroServiceImpl implements BairroService {
                 bairro.getId(),
                 bairro.getNome(),
                 bairro.getCidade().getId(),
-                bairro.getCidade().getNome()
+                bairro.getCidade().getNome(),
+                bairro.getCreatedAt(),
+                bairro.getUpdatedAt()
         );
     }
 }

@@ -2,6 +2,7 @@ package com.victors.apilogradouro.service.impl;
 
 import com.victors.apilogradouro.dto.request.BairroRequestDTO;
 import com.victors.apilogradouro.dto.response.BairroResponseDTO;
+import com.victors.apilogradouro.dto.response.LogradouroResponseDTO;
 import com.victors.apilogradouro.entity.Bairro;
 import com.victors.apilogradouro.entity.Cidade;
 import com.victors.apilogradouro.exception.MensagensErro;
@@ -77,11 +78,16 @@ public class BairroServiceImpl implements BairroService {
         bairroRepository.deleteById(id);
     }
 
-    // TODO: implementar listarLogradouros quando Logradouro for criado
     @Override
-    public Page<Object> listarLogradouros(Long bairroId, Pageable pageable) {
+    public Page<LogradouroResponseDTO> listarLogradouros(Long bairroId, Pageable pageable) {
         buscarOuLancarErro(bairroId);
-        return Page.empty(pageable);
+        return logradouroRepository.findByBairroId(bairroId, pageable)
+                .map(l -> new LogradouroResponseDTO(
+                        l.getId(), l.getNome(), l.getTipo(), l.getCep(),
+                        l.getBairro().getId(), l.getBairro().getNome(),
+                        l.getBairro().getCidade().getNome(),
+                        l.getBairro().getCidade().getUf().getSigla(),
+                        l.getCreatedAt(), l.getUpdatedAt()));
     }
 
     private Bairro buscarOuLancarErro(Long id) {

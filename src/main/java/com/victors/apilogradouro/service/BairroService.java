@@ -2,6 +2,7 @@ package com.victors.apilogradouro.service;
 
 import com.victors.apilogradouro.dto.request.BairroRequestDTO;
 import com.victors.apilogradouro.dto.response.BairroResponseDTO;
+import com.victors.apilogradouro.dto.response.LogradouroResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -17,6 +18,5 @@ public interface BairroService {
 
     void deletar(Long id);
 
-    // retorno será Page<LogradouroResponseDTO> quando Logradouro for criado
-    Page<Object> listarLogradouros(Long bairroId, Pageable pageable);
+    Page<LogradouroResponseDTO> listarLogradouros(Long bairroId, Pageable pageable);
 }

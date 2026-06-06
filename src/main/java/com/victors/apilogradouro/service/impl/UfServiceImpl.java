@@ -1,6 +1,7 @@
 package com.victors.apilogradouro.service.impl;
 
 import com.victors.apilogradouro.dto.request.UfRequestDTO;
+import com.victors.apilogradouro.dto.response.CidadeResponseDTO;
 import com.victors.apilogradouro.dto.response.UfResponseDTO;
 import com.victors.apilogradouro.entity.Uf;
 import com.victors.apilogradouro.exception.MensagensErro;
@@ -50,7 +51,16 @@ public class UfServiceImpl implements UfService {
         return toResponseDTO(buscarOuLancarErro(id));
     }
 
-    // TODO: implementar busca por sigla quando controller for criado
+    @Override
+    public Page<CidadeResponseDTO> listarCidades(Long ufId, Pageable pageable) {
+        buscarOuLancarErro(ufId);
+        return cidadeRepository.findByUfId(ufId, pageable)
+                .map(c -> new CidadeResponseDTO(
+                        c.getId(), c.getNome(),
+                        c.getUf().getId(), c.getUf().getSigla(),
+                        c.getCreatedAt(), c.getUpdatedAt()));
+    }
+
     @Override
     public UfResponseDTO buscarPorSigla(String sigla) {
         Uf uf = ufRepository.findBySigla(sigla)

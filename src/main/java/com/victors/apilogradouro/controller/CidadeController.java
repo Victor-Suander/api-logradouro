@@ -1,6 +1,7 @@
 package com.victors.apilogradouro.controller;
 
 import com.victors.apilogradouro.dto.request.CidadeRequestDTO;
+import com.victors.apilogradouro.dto.response.BairroResponseDTO;
 import com.victors.apilogradouro.dto.response.CidadeResponseDTO;
 import com.victors.apilogradouro.service.CidadeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,7 +52,7 @@ public class CidadeController {
     // endpoint hierárquico — retorna os bairros pertencentes a uma cidade específica
     @Operation(summary = "Listar bairros de uma cidade")
     @GetMapping("/{id}/bairros")
-    public ResponseEntity<Page<Object>> listarBairros(
+    public ResponseEntity<Page<BairroResponseDTO>> listarBairros(
             @PathVariable Long id,
             @PageableDefault(size = 10, sort = "id") Pageable pageable) {
         return ResponseEntity.ok(cidadeService.listarBairros(id, pageable));

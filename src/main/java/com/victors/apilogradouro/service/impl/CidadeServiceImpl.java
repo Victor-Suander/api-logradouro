@@ -1,6 +1,7 @@
 package com.victors.apilogradouro.service.impl;
 
 import com.victors.apilogradouro.dto.request.CidadeRequestDTO;
+import com.victors.apilogradouro.dto.response.BairroResponseDTO;
 import com.victors.apilogradouro.dto.response.CidadeResponseDTO;
 import com.victors.apilogradouro.entity.Cidade;
 import com.victors.apilogradouro.entity.Uf;
@@ -77,11 +78,14 @@ public class CidadeServiceImpl implements CidadeService {
         cidadeRepository.deleteById(id);
     }
 
-    // TODO: implementar listarBairros quando Bairro for criado
     @Override
-    public Page<Object> listarBairros(Long cidadeId, Pageable pageable) {
+    public Page<BairroResponseDTO> listarBairros(Long cidadeId, Pageable pageable) {
         buscarOuLancarErro(cidadeId);
-        return Page.empty(pageable);
+        return bairroRepository.findByCidadeId(cidadeId, pageable)
+                .map(b -> new BairroResponseDTO(
+                        b.getId(), b.getNome(),
+                        b.getCidade().getId(), b.getCidade().getNome(),
+                        b.getCreatedAt(), b.getUpdatedAt()));
     }
 
     private Cidade buscarOuLancarErro(Long id) {

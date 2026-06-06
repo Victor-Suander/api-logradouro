@@ -11,12 +11,14 @@ import com.victors.apilogradouro.repository.BairroRepository;
 import com.victors.apilogradouro.repository.LogradouroRepository;
 import com.victors.apilogradouro.service.LogradouroService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 // TODO: criar testes unitários para este service
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class LogradouroServiceImpl implements LogradouroService {
@@ -26,7 +28,9 @@ public class LogradouroServiceImpl implements LogradouroService {
 
     @Override
     public LogradouroResponseDTO salvar(LogradouroRequestDTO dto) {
+        log.info("Salvando Logradouro: cep={}", dto.cep());
         if (logradouroRepository.existsByCep(dto.cep())) {
+            log.warn("CEP de Logradouro duplicado: {}", dto.cep());
             throw new RegraNegocioException(MensagensErro.LOGRADOURO_CEP_DUPLICADO);
         }
 
@@ -39,31 +43,41 @@ public class LogradouroServiceImpl implements LogradouroService {
                 .bairro(bairro)
                 .build();
 
-        return toResponseDTO(logradouroRepository.save(logradouro));
+        LogradouroResponseDTO result = toResponseDTO(logradouroRepository.save(logradouro));
+        log.info("Logradouro salvo com sucesso: id={}", result.id());
+        return result;
     }
 
     @Override
     public Page<LogradouroResponseDTO> listar(Pageable pageable) {
+        log.debug("Listando Logradouros: pageable={}", pageable);
         return logradouroRepository.findAll(pageable).map(this::toResponseDTO);
     }
 
     @Override
     public LogradouroResponseDTO buscarPorId(Long id) {
+        log.debug("Buscando Logradouro por id: {}", id);
         return toResponseDTO(buscarOuLancarErro(id));
     }
 
     @Override
     public LogradouroResponseDTO buscarPorCep(String cep) {
+        log.debug("Buscando Logradouro por cep: {}", cep);
         return toResponseDTO(logradouroRepository.findByCep(cep)
-                .orElseThrow(() -> new RecursoNaoEncontradoException(MensagensErro.LOGRADOURO_NAO_ENCONTRADO)));
+                .orElseThrow(() -> {
+                    log.warn("Logradouro não encontrado: cep={}", cep);
+                    return new RecursoNaoEncontradoException(MensagensErro.LOGRADOURO_NAO_ENCONTRADO);
+                }));
     }
 
     @Override
     public LogradouroResponseDTO atualizar(Long id, LogradouroRequestDTO dto) {
+        log.info("Atualizando Logradouro: id={}", id);
         Logradouro logradouro = buscarOuLancarErro(id);
 
         // exclui o próprio id da consulta — sem isso, editar sem mudar o CEP lançaria falso erro de duplicidade
         if (logradouroRepository.existsByCepAndIdNot(dto.cep(), id)) {
+            log.warn("CEP de Logradouro duplicado na atualização: {}", dto.cep());
             throw new RegraNegocioException(MensagensErro.LOGRADOURO_CEP_DUPLICADO);
         }
 
@@ -72,23 +86,33 @@ public class LogradouroServiceImpl implements LogradouroService {
         logradouro.setCep(dto.cep());
         logradouro.setBairro(buscarBairroOuLancarErro(dto.bairroId()));
 
-        return toResponseDTO(logradouroRepository.save(logradouro));
+        LogradouroResponseDTO result = toResponseDTO(logradouroRepository.save(logradouro));
+        log.info("Logradouro atualizado com sucesso: id={}", id);
+        return result;
     }
 
     @Override
     public void deletar(Long id) {
+        log.warn("Deletando Logradouro: id={}", id);
         buscarOuLancarErro(id);
         logradouroRepository.deleteById(id);
+        log.info("Logradouro deletado com sucesso: id={}", id);
     }
 
     private Logradouro buscarOuLancarErro(Long id) {
         return logradouroRepository.findById(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException(MensagensErro.LOGRADOURO_NAO_ENCONTRADO));
+                .orElseThrow(() -> {
+                    log.warn("Logradouro não encontrado: id={}", id);
+                    return new RecursoNaoEncontradoException(MensagensErro.LOGRADOURO_NAO_ENCONTRADO);
+                });
     }
 
     private Bairro buscarBairroOuLancarErro(Long bairroId) {
         return bairroRepository.findById(bairroId)
-                .orElseThrow(() -> new RecursoNaoEncontradoException(MensagensErro.BAIRRO_NAO_ENCONTRADO));
+                .orElseThrow(() -> {
+                    log.warn("Bairro não encontrado ao buscar para Logradouro: id={}", bairroId);
+                    return new RecursoNaoEncontradoException(MensagensErro.BAIRRO_NAO_ENCONTRADO);
+                });
     }
 
     private LogradouroResponseDTO toResponseDTO(Logradouro logradouro) {

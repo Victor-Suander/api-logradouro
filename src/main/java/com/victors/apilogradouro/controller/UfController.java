@@ -1,6 +1,7 @@
 package com.victors.apilogradouro.controller;
 
 import com.victors.apilogradouro.dto.request.UfRequestDTO;
+import com.victors.apilogradouro.dto.response.CidadeResponseDTO;
 import com.victors.apilogradouro.dto.response.UfResponseDTO;
 import com.victors.apilogradouro.service.UfService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,6 +53,15 @@ public class UfController {
     @GetMapping("/sigla/{sigla}")
     public ResponseEntity<UfResponseDTO> buscarPorSigla(@PathVariable String sigla) {
         return ResponseEntity.ok(ufService.buscarPorSigla(sigla));
+    }
+
+    // endpoint hierárquico — retorna as cidades pertencentes a uma UF específica
+    @Operation(summary = "Listar cidades de uma UF")
+    @GetMapping("/{id}/cidades")
+    public ResponseEntity<Page<CidadeResponseDTO>> listarCidades(
+            @PathVariable Long id,
+            @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+        return ResponseEntity.ok(ufService.listarCidades(id, pageable));
     }
 
     @Operation(summary = "Atualizar UF por ID")

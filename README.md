@@ -46,8 +46,6 @@ O banco H2 é em memória — os dados são perdidos ao reiniciar. Para acessar 
 - JDBC URL: `jdbc:h2:mem:apilogradourodb`
 - Usuário: `sa` / Senha: *(vazia)*
 
-[PRINT: tela do H2 Console com as tabelas criadas]
-
 ---
 
 ## Swagger
@@ -58,7 +56,7 @@ Com a aplicação rodando, acesse:
 http://localhost:8080/swagger-ui/index.html
 ```
 
-[PRINT: tela inicial do Swagger com os 4 grupos de endpoints expandidos]
+![Visão geral do Swagger com os 4 grupos de endpoints](docs/images/swagger-visao-geral.png)
 
 ---
 
@@ -233,7 +231,7 @@ CEP aceito nos formatos `99999-999` ou `99999999`.
 }
 ```
 
-[PRINT: exemplo de requisição no Swagger para POST /logradouros com resposta 201]
+![Exemplo de cadastro de logradouro no Swagger](docs/images/swagger-cadastro-uf.png)
 
 ---
 
@@ -262,7 +260,7 @@ São 40 testes distribuídos entre:
 - **Testes de paginação** — verificam a estrutura da resposta paginada
 - **Testes dos endpoints hierárquicos** — verificam navegação entre os recursos
 
-[PRINT: resultado do mvn test com BUILD SUCCESS e os 40 testes passando]
+![Resultado dos testes com BUILD SUCCESS](docs/images/swagger-ui_index.html.png)
 
 ---
 
